@@ -153,7 +153,7 @@ class APIManager: SessionManager {
     // MARK: TODO: Retweet
     
     func retweet(_ tweet: Tweet, completion: @escaping (Tweet?, Error?) -> ()) {
-        let urlString = "https://api.twitter.com/1.1/statuses/retweet/:id.json"
+        let urlString = "https://api.twitter.com/1.1/statuses/retweet/" + String(tweet.id) + ".json"
         let parameters = ["id": tweet.id]
         request(urlString, method: .post, parameters: parameters, encoding: URLEncoding.queryString).responseJSON { (response) in
             if response.result.isSuccess,
