@@ -7,13 +7,46 @@
 //
 
 import UIKit
+import AlamofireImage
 
 class DetailViewController: UIViewController {
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    
+    @IBOutlet weak var usernameLabel: UILabel!
+    
+    @IBOutlet weak var profileImageView: UIImageView!
+    
+    @IBOutlet weak var tweetTextLabel: UILabel!
+    
+    @IBOutlet weak var timestampLabel: UILabel!
+    
+    @IBOutlet weak var retweetCountLabel: UILabel!
+    
+    @IBOutlet weak var likeCountLabel: UILabel!
+    
+    var tweet: Tweet!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        if let tweet = tweet {
+            nameLabel.text = tweet.user.name
+            usernameLabel.text = "@" + tweet.user.username
+            
+            let profileURL = URL(string: tweet.user.profileImageURL)
+            
+            profileImageView.af_setImage(withURL: profileURL!)
+            
+            tweetTextLabel.text = tweet.text
+            timestampLabel.text = tweet.createdAtString
+            retweetCountLabel.text = String(tweet.retweetCount)
+            likeCountLabel.text = String(tweet.favoriteCount)
+
+            
+        }
+    
+    
     }
 
     override func didReceiveMemoryWarning() {

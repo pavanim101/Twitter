@@ -4,11 +4,11 @@
 //
 //  Created by Charles Hieger on 6/18/17.
 //  Copyright © 2017 Charles Hieger. All rights reserved.
-//
+// TODO: favorites/retweets, detail view, tab bar, profile, clickable links, infinite scorlling
 
 import UIKit
 
-class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate  {
     
     var tweets: [Tweet] = []
     
@@ -23,14 +23,34 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        
+         tableView.insertSubview(refreshControl, at: 0)
+        
         APIManager.shared.getHomeTimeLine { (tweets, error) in
             if let tweets = tweets {
                 self.tweets = tweets
+                print(self.tweets)
                 self.tableView.reloadData()
             } else if let error = error {
                 print("Error getting home timeline: " + error.localizedDescription)
             }
         }
+    }
+    
+    func refreshControlAction(_ refreshControl: UIRefreshControl) {
+        APIManager.shared.getHomeTimeLine { (tweets, error) in
+            if let tweets = tweets {
+                self.tweets = tweets
+                print(self.tweets)
+                self.tableView.reloadData()
+                 refreshControl.endRefreshing()
+            } else if let error = error {
+                print("Error getting home timeline: " + error.localizedDescription)
+            }
+        }
+       
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -59,15 +79,28 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         APIManager.shared.logout()
     }
     
+    func did(post: Tweet) {
+       tweets.insert(post, at: 0)
+        self.tableView.beginUpdates()
+        self.tableView.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .automatic)
+        self.tableView.endUpdates()
+    }
     
-    /*
-     // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "composeTweet" {
+        let composeViewController = segue.destination as! ComposeViewController
+        composeViewController.delegate = self
+        }
+        else if segue.identifier == "tweetDetail" {
+            let cell = sender as! TweetCell
+            if let indexPath = tableView.indexPath(for: cell){
+                let tweet = tweets[indexPath.row]
+                let tweetDetailViewController = segue.destination as! DetailViewController
+                tweetDetailViewController.tweet = tweet
+        }
      
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+        }
+    }
     
 }

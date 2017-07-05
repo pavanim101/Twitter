@@ -7,29 +7,45 @@
 //
 
 import UIKit
+import RSKPlaceholderTextView
+
+protocol ComposeViewControllerDelegate: class {
+    func did(post: Tweet)
+}
 
 class ComposeViewController: UIViewController {
-
+    
+    weak var delegate: ComposeViewControllerDelegate?
+    
+    @IBOutlet weak var composeTextView: RSKPlaceholderTextView!
+    var textToPost: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        composeTextView.placeholder = "What's happening?"
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
-    */
-
+    
+    @IBAction func postTweet(_ sender: UIButton) {
+        self.textToPost = composeTextView.text
+        print(self.textToPost)
+        APIManager.shared.composeTweet(with: self.textToPost) { (tweet, error) in
+            if let error = error {
+                print("Error composing Tweet: \(error.localizedDescription)")
+            } else if let tweet = tweet {
+                self.delegate?.did(post: tweet)
+                print("Compose Tweet Success!")
+                self.composeTextView.text = ""
+            }
+        }
+    }
+    
+    
+    @IBAction func closeCompose(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
