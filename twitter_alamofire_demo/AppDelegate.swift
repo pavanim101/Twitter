@@ -18,9 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if User.current != nil {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let homeTimelineViewController = storyboard.instantiateViewController(withIdentifier: "TweetsNavigationController")
+            let homeTimelineViewController = storyboard.instantiateViewController(withIdentifier: "tabBarController")
             window?.rootViewController = homeTimelineViewController
         }
+        
+
+        
         
         NotificationCenter.default.addObserver(forName: Notification.Name("didLogout"), object: nil, queue: OperationQueue.main) { (Notification) in
             print("Logout notification received")

@@ -4,11 +4,11 @@
 //
 //  Created by Charles Hieger on 6/18/17.
 //  Copyright © 2017 Charles Hieger. All rights reserved.
-// TODO: favorites/retweets, detail view, tab bar, profile, clickable links, infinite scorlling
+// TODO:  profile, unretweet, clickable links, infinite scorlling, char count
 
 import UIKit
 
-class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate  {
+class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate {
     
     var tweets: [Tweet] = []
     
@@ -26,7 +26,8 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         
-         tableView.insertSubview(refreshControl, at: 0)
+        tableView.insertSubview(refreshControl, at: 0)
+    
         
         APIManager.shared.getHomeTimeLine { (tweets, error) in
             if let tweets = tweets {
@@ -35,6 +36,20 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
                 self.tableView.reloadData()
             } else if let error = error {
                 print("Error getting home timeline: " + error.localizedDescription)
+            }
+        }
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer)  {
+        
+        
+        
+        if recognizer.state == UIGestureRecognizerState.ended {
+            let tapLocation = recognizer.location(in: self.tableView)
+            if let tapIndexPath = self.tableView.indexPathForRow(at: tapLocation) {
+                if let tappedCell = self.tableView.cellForRow(at: tapIndexPath) as? TweetCell {
+                    let username = tappedCell.tweet.user.username
+                }
             }
         }
     }
@@ -62,6 +77,7 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         
         cell.tweet = tweets[indexPath.row]
         
+    
         return cell
     }
     
@@ -98,9 +114,12 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
                 let tweet = tweets[indexPath.row]
                 let tweetDetailViewController = segue.destination as! DetailViewController
                 tweetDetailViewController.tweet = tweet
+                tweetDetailViewController.row = indexPath.row
+                print("assigned data")
         }
      
         }
     }
+    
     
 }

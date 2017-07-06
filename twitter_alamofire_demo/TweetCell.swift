@@ -10,6 +10,8 @@ import UIKit
 import AlamofireImage
 
 
+
+
 class TweetCell: UITableViewCell {
     
     @IBOutlet weak var tweetTextLabel: UILabel!
@@ -30,7 +32,7 @@ class TweetCell: UITableViewCell {
     
     @IBOutlet weak var retweetButton: UIButton!
     
-    
+        
     var tweet: Tweet! {
         didSet {
             self.refreshData()
@@ -38,6 +40,13 @@ class TweetCell: UITableViewCell {
         }
     }
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        
+    }
+    
+        
     
     @IBAction func didLike(_ sender: UIButton) {
         if tweet.favorited == false {
@@ -105,11 +114,6 @@ class TweetCell: UITableViewCell {
         
     }
     
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

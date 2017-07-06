@@ -150,8 +150,6 @@ class APIManager: SessionManager {
         }
     }
     
-    // MARK: TODO: Retweet
-    
     func retweet(_ tweet: Tweet, completion: @escaping (Tweet?, Error?) -> ()) {
         let urlString = "https://api.twitter.com/1.1/statuses/retweet/" + String(tweet.id) + ".json"
         let parameters = ["id": tweet.id]
@@ -166,14 +164,43 @@ class APIManager: SessionManager {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    // MARK: TODO: Un-Retweet
+  /*
+    func unretweet(_ tweet: Tweet, completion: @escaping (Tweet?, Error?) -> ()) {
+        
+        
+        if tweet.retweeted == false {
+            return } else {
+            if tweet.retweeted == nil {
+                let original_tweet_id = tweet.id
+                else {
+                    let original_tweet_id = tweet.retweeted_status.id_str
+
+        
+        let full_tweet = GET("https://api.twitter.com/1.1/statuses/show/" + original_tweet_id + "json?include_my_retweet=1")
+        let retweet_id = full_tweet.current_user_retweet.id_str
+        
+        
+        
+        
+        
+        
+        let urlString = "https://api.twitter.com/1.1/statuses/destroy/" + retweet_id + ".json"
+        let parameters = ["id": tweet.id]
+        request(urlString, method: .post, parameters: parameters, encoding: URLEncoding.queryString).responseJSON { (response) in
+            if response.result.isSuccess,
+                let tweetDictionary = response.result.value as? [String: Any] {
+                let tweet = Tweet(dictionary: tweetDictionary)
+                completion(tweet, nil)
+            } else {
+             
+                completion(nil, response.result.error)
+            }
+                    }
+                }
+            }
+        }
+    }
+*/
     
    
     
