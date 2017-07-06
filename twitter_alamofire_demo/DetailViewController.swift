@@ -29,16 +29,30 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var likeButton: UIButton!
     
+  
+    var row: Int?
+    
     var tweet: Tweet!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("tis loading")
-        
+    
         refreshData()
         
         
     }
+    
+    
+    @IBAction func viewProfile(_ sender: UIButton) {
+        self.usernameTapped()
+
+    }
+    
+ 
+    func usernameTapped() {
+        print("performing segue")
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -97,6 +111,13 @@ class DetailViewController: UIViewController {
         }
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            let profileViewController = segue.destination as! ProfileViewController
+        
+            profileViewController.tweet = tweet
+    }
+    
  
  
     
