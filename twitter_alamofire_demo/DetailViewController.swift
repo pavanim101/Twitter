@@ -25,44 +25,96 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var likeCountLabel: UILabel!
     
+    @IBOutlet weak var retweetButton: UIButton!
+    
+    @IBOutlet weak var likeButton: UIButton!
+    
     var tweet: Tweet!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let tweet = tweet {
-            nameLabel.text = tweet.user.name
-            usernameLabel.text = "@" + tweet.user.username
-            
-            let profileURL = URL(string: tweet.user.profileImageURL)
-            
-            profileImageView.af_setImage(withURL: profileURL!)
-            
-            tweetTextLabel.text = tweet.text
-            timestampLabel.text = tweet.createdAtString
-            retweetCountLabel.text = String(tweet.retweetCount)
-            likeCountLabel.text = String(tweet.favoriteCount)
-
-            
-        }
-    
-    
+        print("tis loading")
+        
+        refreshData()
+        
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    @IBAction func didRetweet(_ sender: UIButton) {
+        if tweet.retweeted == false {
+            tweet.retweeted = true
+            tweet.retweetCount += 1
+            
+            refreshData()
+            
+            APIManager.shared.retweet(tweet) { (tweet: Tweet?, error: Error?) in
+                if let  error = error {
+                    print("Error retweeting tweet: \(error.localizedDescription)")
+                } else if let tweet = tweet {
+                    print("Successfully retweeted the following Tweet: \n\(tweet.text)")
+                }
+            }
+        }
+        
     }
-    */
-
+    
+    
+    @IBAction func didLike(_ sender: UIButton) {
+        if tweet.favorited == false {
+            tweet.favorited = true
+            tweet.favoriteCount += 1
+            
+            refreshData()
+            
+            APIManager.shared.favorite(tweet) { (tweet: Tweet?, error: Error?) in
+                if let  error = error {
+                    print("Error favoriting tweet: \(error.localizedDescription)")
+                } else if let tweet = tweet {
+                    print("Successfully favorited the following Tweet: \n\(tweet.text)")
+                }
+            }
+            
+        } else {
+            tweet.favorited = false
+            tweet.favoriteCount -= 1
+            
+            refreshData()
+            
+            APIManager.shared.unfavorite(tweet) { (tweet: Tweet?, error: Error?) in
+                if let  error = error {
+                    print("Error unfavoriting tweet: \(error.localizedDescription)")
+                } else if let tweet = tweet {
+                    print("Successfully unfavorited the following Tweet: \n\(tweet.text)")
+                }
+            }
+        }
+        
+    }
+ 
+ 
+    
+    func refreshData() {
+        if let tweet = tweet {
+        retweetButton.isSelected = tweet.retweeted
+        likeButton.isSelected = tweet.favorited!
+        tweetTextLabel.text = tweet.text
+        nameLabel.text = tweet.user.name
+        usernameLabel.text = "@" + tweet.user.username
+        retweetCountLabel.text = String(tweet.retweetCount)
+        likeCountLabel.text = String(tweet.favoriteCount)
+        timestampLabel.text = tweet.createdAtString
+        
+        let profileURL = URL(string: tweet.user.profileImageURL)!
+        profileImageView.af_setImage(withURL: profileURL)
+        
+        }
+    }
+    
 }
