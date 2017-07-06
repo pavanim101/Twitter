@@ -40,19 +40,7 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func handleTap(recognizer: UITapGestureRecognizer)  {
-        
-        
-        
-        if recognizer.state == UIGestureRecognizerState.ended {
-            let tapLocation = recognizer.location(in: self.tableView)
-            if let tapIndexPath = self.tableView.indexPathForRow(at: tapLocation) {
-                if let tappedCell = self.tableView.cellForRow(at: tapIndexPath) as? TweetCell {
-                    let username = tappedCell.tweet.user.username
-                }
-            }
-        }
-    }
+    
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
         APIManager.shared.getHomeTimeLine { (tweets, error) in
