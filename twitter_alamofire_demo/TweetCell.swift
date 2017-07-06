@@ -95,7 +95,22 @@ class TweetCell: UITableViewCell {
                     print("Successfully retweeted the following Tweet: \n\(tweet.text)")
                 }
             }
+        }else {
+            print("unretweet starting")
+            tweet.retweeted = false
+            tweet.retweetCount -= 1
+            
+            refreshData()
+            
+            APIManager.shared.unretweet(tweet) { (tweet: Tweet?, error: Error?) in
+                if let  error = error {
+                    print("Error unfavoriting tweet: \(error.localizedDescription)")
+                } else if let tweet = tweet {
+                    print("Successfully unfavorited the following Tweet: \n\(tweet.text)")
+                }
+            }
         }
+
     }
     
     

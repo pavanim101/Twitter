@@ -49,15 +49,15 @@ class User {
     
     init(dictionary: [String: Any]) {
         self.dictionary = dictionary
-        self.name = dictionary["name"] as! String
-        self.username = dictionary["screen_name"] as! String
-        self.profileImageURL = dictionary["profile_image_url_https"] as! String
-        self.containsBackground = dictionary["profile_use_background_image"] as! Bool
-        self.description = dictionary["description"] as! String
+        self.name = dictionary["name"] as? String ?? ""
+        self.username = dictionary["screen_name"] as? String ?? ""
+        self.profileImageURL = dictionary["profile_image_url_https"] as? String ?? ""
+        self.containsBackground = dictionary["profile_use_background_image"] as? Bool ?? false
+        self.description = dictionary["description"] as? String ?? ""
         self.backgroundImageURL = dictionary["profile_banner_url"] as? String ?? ""
-        self.followerCount = dictionary["followers_count"] as! Int
-        self.followingCount = dictionary["friends_count"] as! Int
-        self.id = dictionary["id"] as! Int
+        self.followerCount = dictionary["followers_count"] as? Int ?? 0
+        self.followingCount = dictionary["friends_count"] as? Int ?? 0
+        self.id = dictionary["id"] as? Int ?? 0
         
         
     }

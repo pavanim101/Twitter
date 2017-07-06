@@ -4,7 +4,7 @@
 //
 //  Created by Charles Hieger on 6/18/17.
 //  Copyright © 2017 Charles Hieger. All rights reserved.
-// TODO:  profile, unretweet, clickable links, infinite scorlling, char count
+// TODO:  clickable links, relative time, infinite scorlling, char count, pull to refresh profile, connect to detail 
 
 import UIKit
 
@@ -40,8 +40,6 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    
-    
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
         APIManager.shared.getHomeTimeLine { (tweets, error) in
             if let tweets = tweets {
@@ -64,7 +62,6 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
         
         cell.tweet = tweets[indexPath.row]
-        
     
         return cell
     }
@@ -75,7 +72,7 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
     
     
@@ -108,6 +105,5 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
      
         }
     }
-    
-    
+
 }

@@ -17,7 +17,7 @@ class APIManager: SessionManager {
     // MARK: TODO: Add App Keys
     static let consumerKey = "HyZZLJgFMVA5EUODBNJ2PvElI"
     static let consumerSecret = "M32j82YlTaRfSoc7n9jcfM2coxf9cnf1g9TQCh1ASOm9z6gO9x"
-
+    
     
     static let requestTokenURL = "https://api.twitter.com/oauth/request_token"
     static let authorizeURL = "https://api.twitter.com/oauth/authorize"
@@ -75,25 +75,25 @@ class APIManager: SessionManager {
                     return
                 }
                 completion(User(dictionary: userDictionary), nil)
-              
+                
         }
         
     }
-        
+    
     func getHomeTimeLine(completion: @escaping ([Tweet]?, Error?) -> ()) {
-
+        
         // This uses tweets from disk to avoid hitting rate limit. Comment out if you want fresh
         // tweets,
-       /* if let data = UserDefaults.standard.object(forKey: "hometimeline_tweets") as? Data {
-            let tweetDictionaries = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Any]]
-            let tweets = tweetDictionaries.flatMap({ (dictionary) -> Tweet in
-                Tweet(dictionary: dictionary)
-            })
-            
-            completion(tweets, nil)
-            return
-        }
-        */
+        /* if let data = UserDefaults.standard.object(forKey: "hometimeline_tweets") as? Data {
+         let tweetDictionaries = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Any]]
+         let tweets = tweetDictionaries.flatMap({ (dictionary) -> Tweet in
+         Tweet(dictionary: dictionary)
+         })
+         
+         completion(tweets, nil)
+         return
+         }
+         */
         
         request(URL(string: "https://api.twitter.com/1.1/statuses/home_timeline.json")!, method: .get)
             .validate()
@@ -120,7 +120,7 @@ class APIManager: SessionManager {
         }
     }
     
-
+    
     func favorite(_ tweet: Tweet, completion: @escaping (Tweet?, Error?) -> ()) {
         let urlString = "https://api.twitter.com/1.1/favorites/create.json"
         let parameters = ["id": tweet.id]
@@ -135,7 +135,7 @@ class APIManager: SessionManager {
         }
     }
     
-   
+    
     func unfavorite(_ tweet: Tweet, completion: @escaping (Tweet?, Error?) -> ()) {
         let urlString = "https://api.twitter.com/1.1/favorites/destroy.json"
         let parameters = ["id": tweet.id]
@@ -164,45 +164,25 @@ class APIManager: SessionManager {
         }
     }
     
-  /*
+    
     func unretweet(_ tweet: Tweet, completion: @escaping (Tweet?, Error?) -> ()) {
-        
-        
-        if tweet.retweeted == false {
-            return } else {
-            if tweet.retweeted == nil {
-                let original_tweet_id = tweet.id
-                else {
-                    let original_tweet_id = tweet.retweeted_status.id_str
-
-        
-        let full_tweet = GET("https://api.twitter.com/1.1/statuses/show/" + original_tweet_id + "json?include_my_retweet=1")
-        let retweet_id = full_tweet.current_user_retweet.id_str
-        
-        
-        
-        
-        
-        
-        let urlString = "https://api.twitter.com/1.1/statuses/destroy/" + retweet_id + ".json"
+        let urlString = "https://api.twitter.com/1.1/statuses/unretweet/" + String(tweet.id) + ".json"
         let parameters = ["id": tweet.id]
-        request(urlString, method: .post, parameters: parameters, encoding: URLEncoding.queryString).responseJSON { (response) in
+        request(urlString, method: .post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { (response) in
             if response.result.isSuccess,
                 let tweetDictionary = response.result.value as? [String: Any] {
                 let tweet = Tweet(dictionary: tweetDictionary)
                 completion(tweet, nil)
             } else {
-             
+                
                 completion(nil, response.result.error)
-            }
-                    }
-                }
             }
         }
     }
-*/
     
-   
+    
+    
+    
     
     func composeTweet(with text: String, completion: @escaping (Tweet?, Error?) -> ()) {
         let urlString = "https://api.twitter.com/1.1/statuses/update.json"
@@ -219,9 +199,9 @@ class APIManager: SessionManager {
     // MARK: TODO: Get User Timeline
     
     func getUserTimeLine(completion: @escaping ([Tweet]?, Error?) -> (), userID: String!) {
-    
+        
         request(URL(string: "https://api.twitter.com/1.1/statuses/user_timeline/" + userID + ".json")!, method: .get)
-            .validate() 
+            .validate()
             .responseJSON { (response) in
                 guard response.result.isSuccess else {
                     completion(nil, response.result.error)
@@ -243,14 +223,14 @@ class APIManager: SessionManager {
                 })
                 completion(tweets, nil)
         }
-    }
-
+}
     
-  
+    
+    
     //--------------------------------------------------------------------------------//
     
     
-    
+
     //MARK: OAuth
     static var shared: APIManager = APIManager()
     
@@ -317,8 +297,10 @@ class APIManager: SessionManager {
             print("error: \(error)")
         }
     }
-}
+
 
 enum JSONError: Error {
     case parsing(String)
+}
+
 }

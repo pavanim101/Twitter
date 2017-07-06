@@ -62,6 +62,7 @@ class DetailViewController: UIViewController {
 
     
     @IBAction func didRetweet(_ sender: UIButton) {
+        print(tweet.retweeted)
         if tweet.retweeted == false {
             tweet.retweeted = true
             tweet.retweetCount += 1
@@ -73,6 +74,20 @@ class DetailViewController: UIViewController {
                     print("Error retweeting tweet: \(error.localizedDescription)")
                 } else if let tweet = tweet {
                     print("Successfully retweeted the following Tweet: \n\(tweet.text)")
+                }
+            }
+        } else {
+            print("unretweet starting")
+            tweet.retweeted = false
+            tweet.retweetCount -= 1
+            
+            refreshData()
+            
+            APIManager.shared.unretweet(tweet) { (tweet: Tweet?, error: Error?) in
+                if let  error = error {
+                    print("Error unfavoriting tweet: \(error.localizedDescription)")
+                } else if let tweet = tweet {
+                    print("Successfully unfavorited the following Tweet: \n\(tweet.text)")
                 }
             }
         }
