@@ -12,6 +12,9 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     
     var tweets: [Tweet] = []
     
+    var isMoreDataLoading = false;
+    var queryLimit: Int = 20
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -29,29 +32,38 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.insertSubview(refreshControl, at: 0)
     
         
-        APIManager.shared.getHomeTimeLine { (tweets, error) in
+        APIManager.shared.getHomeTimeLine(completion: {(tweets, error) in
             if let tweets = tweets {
                 self.tweets = tweets
                 print(self.tweets)
                 self.tableView.reloadData()
             } else if let error = error {
                 print("Error getting home timeline: " + error.localizedDescription)
-            }
-        }
-    }
+            }}, count: self.queryLimit)    }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
-        APIManager.shared.getHomeTimeLine { (tweets, error) in
-            if let tweets = tweets {
+        APIManager.shared.getHomeTimeLine(completion: {(tweets, error) in
+        if let tweets = tweets {
                 self.tweets = tweets
                 print(self.tweets)
                 self.tableView.reloadData()
                  refreshControl.endRefreshing()
             } else if let error = error {
                 print("Error getting home timeline: " + error.localizedDescription)
+            }}, count: self.queryLimit)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading){
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                isMoreDataLoading = true
+                self.queryLimit += 20
+                
             }
         }
-       
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
