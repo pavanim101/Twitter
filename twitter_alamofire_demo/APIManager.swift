@@ -228,7 +228,7 @@ class APIManager: SessionManager {
     
     func getFavorites(completion: @escaping ([Tweet]?, Error?) -> (), userID: String!) {
         print(userID)
-        request(URL(string: "https://api.twitter.com/1.1/favorites/list/" + userID + ".json")!, method: .get)
+        request(URL(string: "https://api.twitter.com/1.1/favorites/list.json?user_id=" + userID)!, method: .get)
             .validate()
             .responseJSON { (response) in
                 guard response.result.isSuccess else {

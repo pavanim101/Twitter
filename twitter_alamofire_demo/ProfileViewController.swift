@@ -28,11 +28,51 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBOutlet weak var descriptionLabel: UILabel!
     
+    @IBOutlet weak var feedControl: UISegmentedControl!
+    
     var currentUser: User! = User.current
     
     var tweets: [Tweet] = []
     
     var timelineID: String!
+    
+    var user: User!
+    
+    
+   
+    
+    @IBAction func onChange(_ sender: UISegmentedControl) {
+        switch feedControl.selectedSegmentIndex
+        {
+        case 0:
+            APIManager.shared.getUserTimeLine(completion: { (tweets, error) in
+                if let tweets = tweets {
+                    self.tweets = tweets
+                    print(self.tweets)
+                    self.userTweetsTableView.reloadData()
+                } else if let error = error {
+                    print("Error getting home timeline: " + error.localizedDescription)}}, userID: self.timelineID)
+
+        case 2:
+            APIManager.shared.getFavorites(completion: { (tweets, error) in
+                if let tweets = tweets {
+                    self.tweets = tweets
+                    print(self.tweets)
+                    self.userTweetsTableView.reloadData()
+                } else if let error = error {
+                    print("Error getting home timeline: " + error.localizedDescription)}
+            }, userID: self.timelineID)
+            
+        
+        default:
+            break
+        }
+}
+        
+        
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +106,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 print("Error getting home timeline: " + error.localizedDescription)}}, userID: self.timelineID)
         
         
-        
     }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
@@ -75,7 +114,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self.tweets = tweets
                 print(self.tweets)
                 self.userTweetsTableView.reloadData()
-                refreshControl.endRefreshing()
             } else if let error = error {
                 print("Error getting home timeline: " + error.localizedDescription)}}, userID: self.timelineID)
     }

@@ -4,7 +4,7 @@
 //
 //  Created by Charles Hieger on 6/18/17.
 //  Copyright © 2017 Charles Hieger. All rights reserved.
-// TODO:  clickable links, relative time, infinite scorlling, char count, pull to refresh profile, connect to detail 
+// TODO:  clickable links, relative time, infinite scorlling, char count, connect to detail 
 
 import UIKit
 

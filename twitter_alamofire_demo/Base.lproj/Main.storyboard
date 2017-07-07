@@ -532,6 +532,9 @@
                                     <segment title="Media"/>
                                     <segment title="Likes"/>
                                 </segments>
+                                <connections>
+                                    <action selector="onChange:" destination="47m-b8-laf" eventType="valueChanged" id="Cty-VU-tnv"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -540,6 +543,7 @@
                     <connections>
                         <outlet property="backdropImageView" destination="7gV-sr-ys1" id="j0t-HM-wsR"/>
                         <outlet property="descriptionLabel" destination="bSW-oo-vhU" id="sOm-t5-msK"/>
+                        <outlet property="feedControl" destination="Xtj-dQ-goo" id="S2I-yG-rio"/>
                         <outlet property="followerCountLabel" destination="p8r-EK-wSK" id="jql-ph-sNC"/>
                         <outlet property="followingCount" destination="MEO-t6-hlJ" id="xLG-uN-Zv9"/>
                         <outlet property="nameLabel" destination="3Ve-0d-j8A" id="fsw-k2-weZ"/>
@@ -663,6 +667,7 @@
                 <tabBarController storyboardIdentifier="tabBarController" automaticallyAdjustsScrollViewInsets="NO" id="Uep-X5-Ssv" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="5Rz-Uf-rCJ">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
