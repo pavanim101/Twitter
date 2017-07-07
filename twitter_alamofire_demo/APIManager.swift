@@ -80,7 +80,7 @@ class APIManager: SessionManager {
         
     }
     
-    func getHomeTimeLine(completion: @escaping ([Tweet]?, Error?) -> ()) {
+    func getHomeTimeLine(completion: @escaping ([Tweet]?, Error?) -> (), count: Int) {
         
         // This uses tweets from disk to avoid hitting rate limit. Comment out if you want fresh
         // tweets,
@@ -95,7 +95,7 @@ class APIManager: SessionManager {
          }
          */
         
-        request(URL(string: "https://api.twitter.com/1.1/statuses/home_timeline.json")!, method: .get)
+        request(URL(string: "https://api.twitter.com/1.1/statuses/home_timeline.json?count=" + String(count))!, method: .get)
             .validate()
             .responseJSON { (response) in
                 guard response.result.isSuccess else {
