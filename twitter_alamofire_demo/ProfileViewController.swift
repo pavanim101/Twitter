@@ -39,7 +39,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var user: User!
     
     
-   
+    @IBOutlet weak var headerView: UIView!
+    
     
     @IBAction func onChange(_ sender: UISegmentedControl) {
         switch feedControl.selectedSegmentIndex
@@ -80,6 +81,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         userTweetsTableView.dataSource = self
         userTweetsTableView.delegate = self
         
+        userTweetsTableView.tableHeaderView = headerView
+        
         userTweetsTableView.rowHeight = UITableViewAutomaticDimension
         userTweetsTableView.estimatedRowHeight = 100
         
@@ -109,13 +112,32 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
+        
+        
+        if feedControl.selectedSegmentIndex == 0 {
         APIManager.shared.getUserTimeLine(completion: { (tweets, error) in
             if let tweets = tweets {
                 self.tweets = tweets
                 print(self.tweets)
                 self.userTweetsTableView.reloadData()
+                refreshControl.endRefreshing()
             } else if let error = error {
                 print("Error getting home timeline: " + error.localizedDescription)}}, userID: self.timelineID)
+        } else if feedControl.selectedSegmentIndex == 2 {
+            APIManager.shared.getFavorites(completion: { (tweets, error) in
+                if let tweets = tweets {
+                    self.tweets = tweets
+                    print(self.tweets)
+                    self.userTweetsTableView.reloadData()
+                    self.userTweetsTableView.reloadData()
+                } else if let error = error {
+                    print("Error getting home timeline: " + error.localizedDescription)}
+            }, userID: self.timelineID)
+            
+            
+            
+        }
+        
     }
     
     
@@ -134,6 +156,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let profileURL = URL(string: user.profileImageURL)
         profileImageView.af_setImage(withURL: profileURL!)
+        self.profileImageView.layer.borderWidth=1.0
+        self.profileImageView.layer.borderColor = UIColor.white.cgColor
+        self.profileImageView.layer.masksToBounds = false
+        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.height/2
+        self.profileImageView.clipsToBounds = true
+        
         
         
         if user.backgroundImageURL != "" {

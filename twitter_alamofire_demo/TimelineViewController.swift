@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate {
+class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, UIScrollViewDelegate {
     
     var tweets: [Tweet] = []
     
@@ -39,7 +39,12 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
                 self.tableView.reloadData()
             } else if let error = error {
                 print("Error getting home timeline: " + error.localizedDescription)
-            }}, count: self.queryLimit)    }
+            }}, count: self.queryLimit)
+        
+        self.isMoreDataLoading = false
+    
+    
+    }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
         APIManager.shared.getHomeTimeLine(completion: {(tweets, error) in
@@ -61,6 +66,17 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
                 isMoreDataLoading = true
                 self.queryLimit += 20
+                APIManager.shared.getHomeTimeLine(completion: {(tweets, error) in
+                    if let tweets = tweets {
+                        self.tweets = tweets
+                        print(self.tweets)
+                        self.tableView.reloadData()
+                    } else if let error = error {
+                        print("Error getting home timeline: " + error.localizedDescription)
+                    }}, count: self.queryLimit)
+                
+                self.isMoreDataLoading = false
+
                 
             }
         }

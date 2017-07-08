@@ -126,6 +126,12 @@ class TweetCell: UITableViewCell {
         
         let profileURL = URL(string: tweet.user.profileImageURL)!
         profileImageView.af_setImage(withURL: profileURL)
+        self.profileImageView.layer.borderWidth=1.0
+        self.profileImageView.layer.borderColor = UIColor.white.cgColor
+        self.profileImageView.layer.masksToBounds = false
+        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.height/2
+        self.profileImageView.clipsToBounds = true
+        
         
     }
     
