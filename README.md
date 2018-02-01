@@ -40,12 +40,6 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 - [X] Profile view includes timeline of a user's favorited tweets
-
-Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
-
-1. I'd like to discuss how to incorporate the discover page that Twitter also has. It includes trending hashtags, and other features like news, sports, and entertainment. 
-2. I'd also want to discuss adding in the chat feature and seeing how the backend would work with that.
-
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
@@ -58,9 +52,6 @@ Here's a walkthrough of the autolayout implementation in the horizontal view:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-## Notes
-
-Describe any challenges encountered while building the app.
 
 ## Credits
 
